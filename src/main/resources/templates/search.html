@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Result</title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+<div class="row">
+    <form class="searchmain" method="post" th:action="@{/kanji/}" th:object="${input}">
+        <div class="inner">
+            <input class="button" type="submit" value="Search"/>
+            <div class="textin">
+                <input class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autoCapitalize="off" autoComplete="off" spellCheck="false"  placeholder="Enter Kanji Character" />
+            </div>
+        </div>
+    </form>
+    <div th:if="${kanji}" class="results">
+        <p th:text="${meaning.literal}">Kanji</p>
+        <p th:text="|Radicals - ${radicals.radicals}|">Radicals</p>
+        <img th:src="@{'/images/'+${kanji}}" th:attr="alt=@{'Stroke Count - '+${meaning.misc.stroke_count}}">
+        <p>[[${meaning.meaning.en}]]</p>
+
+    </div>
+</div>
+</body>
+</html>

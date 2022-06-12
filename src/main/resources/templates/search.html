@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Search Result</title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
 <div class="row">
-    <form class="searchmain" method="post" th:action="@{/kanji/}" th:object="${input}">
+    <form class="searchmain" method="post" th:action="@{/}" th:object="${input}">
         <div class="inner">
             <input class="button" type="submit" value="Search"/>
             <div class="textin">

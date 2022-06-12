@@ -8,6 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
 @Controller
 @RequestMapping(value="/")
 public class KanjiControllerWeb {
@@ -18,7 +23,7 @@ public class KanjiControllerWeb {
     @Autowired
     private RadicalsRepository radicalRepo;
 
-    public KanjiControllerWeb(){
+    public KanjiControllerWeb() {
 
     }
 
@@ -35,7 +40,7 @@ public class KanjiControllerWeb {
         System.out.println("{kanji} called");
 
         String hex = Integer.toHexString(kanji.charAt(0));
-        String fileName = String.format("%1$5s",hex).replace(' ', '0')+".svg";
+        String fileName = String.format("%1$5s", hex).replace(' ', '0') + ".svg";
 
         model.addAttribute("kanji", fileName);
         model.addAttribute("meaning", meaningRepo.findMeaningByLiteral(kanji));
@@ -47,17 +52,13 @@ public class KanjiControllerWeb {
 
     @PostMapping(value = "*", produces = {"text/html"})
     public String getKanjiHTML(@ModelAttribute Input t, Model model) {
-
         System.out.println("\n--MODEL ATTRIBUTE CALLED--\n");
 
-        String hex = Integer.toHexString(t.getKanji().charAt(0));
-        String fileName = String.format("%1$5s",hex).replace(' ', '0')+".svg";
-
-        model.addAttribute("kanji", fileName);
-        model.addAttribute("meaning", meaningRepo.findMeaningByLiteral(t.getKanji()));
-        model.addAttribute("radicals", radicalRepo.findRadicalsByKanji(t.getKanji()));
-        model.addAttribute("input", new Input());
-
-        return "search.html";
+        try {
+            return "redirect:/"+ URLEncoder.encode(t.getKanji(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return "redirect:/";
+        }
     }
+
 }

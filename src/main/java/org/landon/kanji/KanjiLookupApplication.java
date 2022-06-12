@@ -14,18 +14,4 @@ public class KanjiLookupApplication {
 		SpringApplication.run(KanjiLookupApplication.class, args);
 	}
 
-	@GetMapping(value= "/")
-	public String mainPage(){
-		return "index.html";
-	}
-
-	@GetMapping(value = "/help", produces = {"text/html"})
-	public String getHelpHTML(){
-		return "help.html";
-	}
-
-	@GetMapping(value="/help")
-	public @ResponseBody String getHelpStr(){
-		return "Here is help";
-	}
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,15 +7,15 @@
 </head>
 <body>
 <div class="row">
-    <form class="searchmain">
+    <form class="searchmain" method="post" th:action="@{/}" th:object="${input}">
         <div class="inner">
             <input class="button" type="submit" value="Search"/>
             <div class="textin">
-                <input class="search" type="text"  autoCapitalize="off" autoComplete="off" autoCorrect="off" spellCheck="false" placeholder="Enter Kanji Character"  />
+                <input class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autoCapitalize="off" autoComplete="off" spellCheck="false"  placeholder="Enter Kanji Character" />
             </div>
         </div>
     </form>
-    <div  id="intro">
+    <div id="intro">
         <p class="center">Welcome!</p>
         <p>How to use: </p>
         <ul>

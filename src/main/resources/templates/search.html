@@ -19,8 +19,7 @@
         <p th:text="${meaning.literal}">Kanji</p>
         <p th:text="|Radicals - ${radicals.radicals}|">Radicals</p>
         <img th:src="@{'/images/'+${kanji}}" th:attr="alt=@{'Stroke Count - '+${meaning.misc.stroke_count}}">
-        <p>[[${meaning.meaning.en}]]</p>
-
+        <p th:text="${meaning.meaning.en}"></p>
     </div>
 </div>
 </body>

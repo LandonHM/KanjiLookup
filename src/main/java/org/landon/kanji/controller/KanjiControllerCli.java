@@ -12,13 +12,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * Class which handles requests with no headers (default option for curl)
+ * Returns output as raw strings which are to be read in command line
+ * Also can return xml or json if request with application/{xml/json} if needed
+ */
 @Controller
 @RequestMapping(value="/")
 public class KanjiControllerCli {
 
+    /**
+     * Repository which holds data relating to the meaning and readings of kanji
+     */
     @Autowired
     private MeaningRepository meaningRepo;
 
+    /**
+     * Repository which holds the radicals which make up a kanji character
+     */
     @Autowired
     private RadicalsRepository radicalRepo;
 
@@ -26,11 +37,20 @@ public class KanjiControllerCli {
 
     }
 
+    /**
+     * Default handler, returns help message
+     * @return String of data showing how the user search the data they need
+     */
     @GetMapping(value = "*")
     public @ResponseBody String getKanjiFallback(){
-        return "\u001b[31mError:\u001b[0m Only /{char here} is a valid request.\n";
+        return "Here is how to use...";
     }
 
+    /**
+     * Gives a string of data relating to a kanji character
+     * @param kanji Kanji character which user is looking up
+     * @return String of data relating to the kanji character
+     */
     @GetMapping(value = "/{kanji}")
     public @ResponseBody String getKanji(@PathVariable(value = "kanji", required = true) String kanji){
         KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
@@ -78,6 +98,11 @@ public class KanjiControllerCli {
         return out;
     }
 
+    /**
+     * Gives xml/json data relating to the meaning of a kanji character
+     * @param kanji Kanji character which user is looking up
+     * @return returns object of kanjimeaning which will auto be formatted to xml/json depending on the request
+     */
     //@CrossOrigin()
     @GetMapping(value = "/{kanji}", produces = {"application/json", "application/xml"})
     public @ResponseBody

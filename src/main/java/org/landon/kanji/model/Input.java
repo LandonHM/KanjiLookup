@@ -1,5 +1,8 @@
 package org.landon.kanji.model;
 
+/**
+ * Used to store the user input in the 'search.html' page.
+ */
 public class Input {
     public String kanji;
 

@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
+
 
 /**
  * Class which handles the request for text/html (usually web browsers)

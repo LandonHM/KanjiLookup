@@ -1,6 +1,5 @@
 package org.landon.kanji.controller;
 
-import org.landon.kanji.model.Input;
 import org.landon.kanji.model.KanjiMeaning;
 import org.landon.kanji.model.KanjiRadicals;
 import org.landon.kanji.repository.MeaningRepository;
@@ -11,7 +10,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;

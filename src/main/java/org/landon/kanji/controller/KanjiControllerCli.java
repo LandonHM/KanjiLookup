@@ -6,10 +6,18 @@ import org.landon.kanji.model.KanjiRadicals;
 import org.landon.kanji.repository.MeaningRepository;
 import org.landon.kanji.repository.RadicalsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 /**
@@ -108,5 +116,58 @@ public class KanjiControllerCli {
     public @ResponseBody
     KanjiMeaning getKanjiApplication(@PathVariable(value = "kanji", required = true) String kanji){
         return meaningRepo.findMeaningByLiteral(kanji);
+    }
+
+    @GetMapping(value = "/svg/{kanji}")
+    public ResponseEntity<Resource> getKanjiHTML(@PathVariable(value = "kanji", required = true) String kanji) {
+        String hex = Integer.toHexString(kanji.charAt(0));
+        String fileName = String.format("%1$5s",hex).replace(' ', '0')+".svg";
+        String baseDir = "/home/landon/IdeaProjects/kanji/src/main/resources/static/images/";
+        File file = new File(baseDir+fileName);
+
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+
+        Path path = Paths.get(file.getAbsolutePath());
+        ByteArrayResource resource = null;
+        try{
+            resource = new ByteArrayResource(Files.readAllBytes(path));
+        }catch (Exception e){
+            System.out.println("\n\nError\n\n");
+        }
+
+        return ResponseEntity.ok()
+                .headers(header)
+                .contentLength(file.length())
+                .body(resource);
+
+    }
+    @GetMapping(value = "/ref/{kanji}")
+    public @ResponseBody String getKanjiRef(@PathVariable(value = "kanji", required = true) String kanji){
+        KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
+
+        // Cannot find, return error.
+        if(k == null)
+            return "\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n";
+
+        //Data from meaning
+        String literal = k.getLiteral();
+        Map<String, String> dicNumber = k.getDic_number();
+
+        String nanori = k.getNanori();
+        String temp;
+
+        //Return message to console.
+        String out = "\t\t" + k.getLiteral() + "   (" + k + " strokes)\n";
+        out += "Radicals:\n\t" + "\n";
+
+        return out;
+    }
+
+    //@CrossOrigin()
+    @GetMapping(value = "/ref/{kanji}", produces = {"application/json", "application/xml"})
+    public @ResponseBody
+    Map<String,String> getKanjiApplicationRef(@PathVariable(value = "kanji", required = true) String kanji){
+        return meaningRepo.findMeaningByLiteral(kanji).getDic_number();
     }
 }

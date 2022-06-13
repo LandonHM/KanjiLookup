@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Search Result</title>
-    <link rel="stylesheet" href="../css/index.css">
+    <title>[[${kanji}]] - Results</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 <div class="row">
@@ -15,11 +15,15 @@
             </div>
         </div>
     </form>
-    <div th:if="${kanji}" class="results">
+    <div th:if="${meaning}" class="results">
         <p th:text="${meaning.literal}">Kanji</p>
         <p th:text="|Radicals - ${radicals.radicals}|">Radicals</p>
-        <img th:src="@{'/images/'+${kanji}}" th:attr="alt=@{'Stroke Count - '+${meaning.misc.stroke_count}}">
+        <img th:src="@{'/images/'+${filename}}" th:attr="alt=@{'Stroke Count - '+${meaning.misc.stroke_count}}">
         <p th:text="${meaning.meaning.en}"></p>
+    </div>
+    <div th:unless="${meaning}" class="results">
+        <p>Could not find '[[${kanji}]]' in the database</p>
+        <p>If you believe this to be an error contact me at ...</p>
     </div>
 </div>
 </body>

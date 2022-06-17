@@ -20,10 +20,37 @@
         <p th:text="|Radicals - ${radicals.radicals}|">Radicals</p>
         <img th:src="@{'/images/'+${filename}}" th:attr="alt=@{'Stroke Count - '+${meaning.misc.stroke_count}}">
         <p th:text="${meaning.meaning.en}"></p>
+        <p th:if="${#maps.containsKey(meaning.misc,'grade')}" th:text="|Grade - ${meaning.misc.grade}|">Grade</p>
+        <p th:if="${#maps.containsKey(meaning.misc,'freq')}" th:text="|Frequency in news - ${meaning.misc.freq}/2500|">Freq</p>
+        <p th:if="${#maps.containsKey(meaning.misc,'jlpt')}" th:text="|JLPT Level - ${meaning.misc.jlpt}|">jlpt</p>
+
+
+        <ul>
+            <li>Dictionary References</li>
+            <li>Query Code</li>
+            <li>Codepoints</li>
+        </ul>
+        <table>
+            <tr th:each="dicEntry : ${meaning.dic_number}">
+                <td th:text="${dicEntry.key}">Key</td>
+                <td th:text="${dicEntry.value}">Value</td>
+            </tr>
+        </table>
+        <table>
+            <tr th:each="dicEntry : ${meaning.query_code}">
+                <td th:text="${dicEntry.key}">Key</td>
+                <td th:text="${dicEntry.value}">Value</td>
+            </tr>
+        </table>
+        <table>
+            <tr th:each="dicEntry : ${meaning.codepoint}">
+                <td th:text="${dicEntry.key}">Key</td>
+                <td th:text="${dicEntry.value}">Value</td>
+            </tr>
+        </table>
     </div>
     <div th:unless="${meaning}" class="results">
         <p>Could not find '[[${kanji}]]' in the database</p>
-        <p>If you believe this to be an error contact me at ...</p>
     </div>
 </div>
 </body>

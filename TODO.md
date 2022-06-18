@@ -2,9 +2,7 @@
 
 ## Web:
 - Formatting (css)
-- Adding more content (refs, data sources)
-- maybe footer with info
-- etc.
+- maybe footer with info, or header
 
 ## Curl:
 - Proper help message/intro

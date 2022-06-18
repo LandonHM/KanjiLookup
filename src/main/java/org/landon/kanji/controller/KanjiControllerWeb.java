@@ -84,7 +84,7 @@ public class KanjiControllerWeb {
      * @return
      */
     @GetMapping(value = "*", produces = {"text/html"})
-    public String getKanjiHTML(Model model) {
+    public String getKanji(Model model) {
         //System.out.println("\n--RAW CALLED--\n");
         model.addAttribute("input", new Input());
         return "index.html";
@@ -97,7 +97,7 @@ public class KanjiControllerWeb {
      * @return
      */
     @GetMapping(value = "/{kanji}", produces = {"text/html"})
-    public String getKanjiHTML(@PathVariable(value = "kanji", required = true) String kanji, Model model) {
+    public String getKanji(@PathVariable(value = "kanji", required = true) String kanji, Model model) {
         //System.out.println("{kanji} called");
         // The svg files are stored as the characters hex value padded with 0's
         String hex = Integer.toHexString(kanji.charAt(0));
@@ -119,7 +119,7 @@ public class KanjiControllerWeb {
      * @return Redirects user to url with encoded character
      */
     @PostMapping(value = "*", produces = {"text/html"})
-    public String getKanjiHTML(@ModelAttribute Input in, Model model) {
+    public String getKanji(@ModelAttribute Input in, Model model) {
         //System.out.println("\n--MODEL ATTRIBUTE CALLED--\n");
         try {
             // Just take the first character and ignore the rest
@@ -127,6 +127,11 @@ public class KanjiControllerWeb {
         } catch (UnsupportedEncodingException e) {
             return "redirect:/";
         }
+    }
+
+    @GetMapping(value = "/sources", produces = {"text/html"})
+    public String getSources(Model model) {
+        return "sources.html";
     }
 
 }

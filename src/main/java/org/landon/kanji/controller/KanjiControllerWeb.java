@@ -21,47 +21,6 @@ import java.util.HashMap;
 @RequestMapping(value="/")
 public class KanjiControllerWeb {
 
-    /*private static final HashMap<String, String> dictionaryReferences;
-    static{
-        HashMap<String, String> tmp = new HashMap<String, String>();
-        tmp.put("nelson_c", "Modern Reader's Japanese-English Character Dictionary");
-        tmp.put("nelson_n", "The New Nelson Japanese-English Character Dictionary");
-        tmp.put("halpern_njecd", "New Japanese-English Character Dictionary");
-        tmp.put("halpern_kkd", "Kodansha Kanji Dictionary, (2nd Ed. of the NJECD)");
-        tmp.put("halpern_kkld", "Kanji Learners Dictionary (Kodansha)");
-        tmp.put("halpern_kkld_2ed", "Kanji Learners Dictionary (Kodansha), 2nd ed");
-        tmp.put("heisig", "Remembering The  Kanji  by  James Heisig");
-        tmp.put("heisig6", "Remembering The  Kanji, Sixth Ed.  by  James Heisig");
-        tmp.put("gakken", "A  New Dictionary of Kanji Usage (Gakken)");
-        tmp.put("oneill_names", "Japanese Names (P.G. O'Neill)");
-        tmp.put("oneill_kk", "Essential Kanji (P.G. O'Neill)");
-        tmp.put("moro", "Daikanwajiten");
-        tmp.put("henshall", "A Guide To Remembering Japanese Characters");
-        tmp.put("sh_kk", "Kanji and Kana");
-        tmp.put("sh_kk2", "Kanji and Kana (2011 edition)");
-        tmp.put("sakade", "A Guide To Reading and Writing Japanese");
-        tmp.put("jf_cards", "Japanese Kanji Flashcards (Max Hodges and Tomoko Okazaki)");
-        tmp.put("henshall3", "A Guide To Reading and Writing Japanese 3rd edition");
-        tmp.put("tutt_cards", "Tuttle Kanji Cards");
-        tmp.put("crowley", "The Kanji Way to Japanese Language Power");
-        tmp.put("kanji_in_context", "Kanji in Context");
-        tmp.put("busy_people", "Japanese For Busy People");
-        tmp.put("kodansha_compact", "Kodansha Compact Kanji Guide");
-        tmp.put("maniette", "Les Kanjis dans la tete");
-
-        tmp.put("jis208", "JIS X 0208 (kuten coding)");
-        tmp.put("jis212", "JIS X 0212 (kuten coding)");
-        tmp.put("jis213", "JIS X 0213 (kuten coding)");
-        tmp.put("deroo", "De Roo number");
-        tmp.put("njecd", "Halpern NJECD index number");
-        tmp.put("s_h", "The Kanji Dictionary (Spahn & Hadamitzky)");
-        tmp.put("nelson_c", "\"Classic\" Nelson");
-        tmp.put("oneill", "Japanese Names (O'Neill)");
-        tmp.put("ucs", "Unicode codepoint (hex)");
-
-        dictionaryReferences = (HashMap<String, String>) Collections.unmodifiableMap(tmp);
-    }*/
-
     /**
      * Repository which holds data relating to the meaning and readings of kanji
      */

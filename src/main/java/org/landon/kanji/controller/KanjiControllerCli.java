@@ -117,7 +117,7 @@ public class KanjiControllerCli {
     }
 
     @GetMapping(value = "/svg/{kanji}")
-    public ResponseEntity<Resource> getKanjiHTML(@PathVariable(value = "kanji", required = true) String kanji) {
+    public ResponseEntity<Resource> getKanjiSvg(@PathVariable(value = "kanji", required = true) String kanji) {
         String hex = Integer.toHexString(kanji.charAt(0));
         String fileName = String.format("%1$5s",hex).replace(' ', '0')+".svg";
         String baseDir = "/home/landon/IdeaProjects/kanji/src/main/resources/static/images/";
@@ -140,7 +140,7 @@ public class KanjiControllerCli {
                 .body(resource);
 
     }
-    @GetMapping(value = "/ref/{kanji}")
+    @GetMapping(value = {"/ref/{kanji}","/dic/{kanji}"})
     public @ResponseBody String getKanjiRef(@PathVariable(value = "kanji", required = true) String kanji){
         KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
 
@@ -148,24 +148,25 @@ public class KanjiControllerCli {
         if(k == null)
             return "\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n";
 
-        //Data from meaning
-        String literal = k.getLiteral();
-        Map<String, String> dicNumber = k.getDic_number();
-
-        String nanori = k.getNanori();
-        String temp;
+        // Data for dictionary references
+        Map<String, String> ref = k.getDic_number();
+        int size = 58;
 
         //Return message to console.
-        String out = "\t\t" + k.getLiteral() + "   (" + k + " strokes)\n";
-        out += "Radicals:\n\t" + "\n";
+        String out = "\t\t" + k.getLiteral() + "\n";
+
+        for(Map.Entry<String,String> e : ref.entrySet()){
+            //System.out.println(e.getKey());
+            //out += Dictionary.map.get(e.getKey()) + "\n";
+            out += Dictionary.map.get(e.getKey()) + " " + e.getValue() + "\n";
+        }
 
         return out;
     }
 
     //@CrossOrigin()
     @GetMapping(value = "/ref/{kanji}", produces = {"application/json", "application/xml"})
-    public @ResponseBody
-    Map<String,String> getKanjiApplicationRef(@PathVariable(value = "kanji", required = true) String kanji){
+    public @ResponseBody Map<String,String> getKanjiApplicationRef(@PathVariable(value = "kanji", required = true) String kanji){
         return meaningRepo.findMeaningByLiteral(kanji).getDic_number();
     }
 }

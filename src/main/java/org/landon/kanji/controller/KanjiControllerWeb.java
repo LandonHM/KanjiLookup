@@ -59,8 +59,7 @@ public class KanjiControllerWeb {
     public String getKanji(@PathVariable(value = "kanji", required = true) String kanji, Model model) {
         //System.out.println("{kanji} called");
         // The svg files are stored as the characters hex value padded with 0's
-        String hex = Integer.toHexString(kanji.charAt(0));
-        String fileName = String.format("%1$5s", hex).replace(' ', '0') + ".svg";
+        String fileName = String.format("%1$05x.svg", (int) kanji.charAt(0));
 
         model.addAttribute("kanji", kanji);
         model.addAttribute("filename", fileName);

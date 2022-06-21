@@ -118,8 +118,8 @@ public class KanjiControllerCli {
 
     @GetMapping(value = "/svg/{kanji}")
     public ResponseEntity<Resource> getKanjiSvg(@PathVariable(value = "kanji", required = true) String kanji) {
-        String hex = Integer.toHexString(kanji.charAt(0));
-        String fileName = String.format("%1$5s",hex).replace(' ', '0')+".svg";
+        String fileName = String.format("%1$05x.svg", (int) kanji.charAt(0));
+
         String baseDir = "/home/landon/IdeaProjects/kanji/src/main/resources/static/images/";
         File file = new File(baseDir+fileName);
 
@@ -153,14 +153,13 @@ public class KanjiControllerCli {
         int size = 58;
 
         //Return message to console.
-        String out = "\t\t" + k.getLiteral() + "\n";
-
+        String out = "\n";
+        out += line;
         for(Map.Entry<String,String> e : ref.entrySet()){
-            //System.out.println(e.getKey());
-            //out += Dictionary.map.get(e.getKey()) + "\n";
-            out += Dictionary.map.get(e.getKey()) + " " + e.getValue() + "\n";
+            //out += Dictionary.map.get(e.getKey()) + " " + e.getValue() + "\n";
+            out += String.format("| %1$-54s : %2$-6s |%n",Dictionary.map.get(e.getKey()),e.getValue());
         }
-
+        out += line + "\n";
         return out;
     }
 

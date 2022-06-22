@@ -116,6 +116,11 @@ public class KanjiControllerCli {
         return meaningRepo.findMeaningByLiteral(kanji);
     }
 
+    /**
+     * Returns svg file of a kanji indicating proper stroke order
+     * @param kanji Kanji character which user is looking up
+     * @return A resource which is an svg file of the specified kanji
+     */
     @GetMapping(value = "/svg/{kanji}")
     public ResponseEntity<Resource> getKanjiSvg(@PathVariable(value = "kanji", required = true) String kanji) {
         String fileName = String.format("%1$05x.svg", (int) kanji.charAt(0));
@@ -140,6 +145,12 @@ public class KanjiControllerCli {
                 .body(resource);
 
     }
+
+    /**
+     * Gives a string of data relating to a kanji character's dictionary references
+     * @param kanji Kanji character which user is looking up
+     * @return Formatted string of related references
+     */
     @GetMapping(value = {"/ref/{kanji}","/dic/{kanji}"})
     public @ResponseBody String getKanjiRef(@PathVariable(value = "kanji", required = true) String kanji){
         KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
@@ -150,20 +161,26 @@ public class KanjiControllerCli {
 
         // Data for dictionary references
         Map<String, String> ref = k.getDic_number();
-        int size = 58;
 
         //Return message to console.
         String out = "\n";
+        out += String.format("%1$31s+----+%1$31s%n", "");
+        out += String.format("%1$31s| %2$s | %1$31s%n", "", kanji.charAt(0));
+        out += String.format("%1$31s+----+%1$31s%n", "");
+        String line = String.format("+%65s+%n", "").replace(" ", "-");
         out += line;
         for(Map.Entry<String,String> e : ref.entrySet()){
-            //out += Dictionary.map.get(e.getKey()) + " " + e.getValue() + "\n";
             out += String.format("| %1$-54s : %2$-6s |%n",Dictionary.map.get(e.getKey()),e.getValue());
         }
         out += line + "\n";
         return out;
     }
 
-    //@CrossOrigin()
+    /**
+     * Gives xml/json data relating to the references of a kanji character
+     * @param kanji Kanji character which user is looking up
+     * @return returns map which will auto be formatted to xml/json depending on the request
+     */
     @GetMapping(value = "/ref/{kanji}", produces = {"application/json", "application/xml"})
     public @ResponseBody Map<String,String> getKanjiApplicationRef(@PathVariable(value = "kanji", required = true) String kanji){
         return meaningRepo.findMeaningByLiteral(kanji).getDic_number();

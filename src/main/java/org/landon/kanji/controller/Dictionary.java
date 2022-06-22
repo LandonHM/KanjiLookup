@@ -2,6 +2,9 @@ package org.landon.kanji.controller;
 
 import java.util.Map;
 
+/**
+ * Static class which maps shortened dictionary titles to their proper form as defined from the source (EDRDG kanjidic2)
+ */
 public class Dictionary {
     public static final Map<String, String> map = Map.ofEntries(
             Map.entry("nelson_c", "Modern Reader's Japanese-English Character Dictionary"),
@@ -20,7 +23,7 @@ public class Dictionary {
             Map.entry("sh_kk", "Kanji and Kana"),
             Map.entry("sh_kk2", "Kanji and Kana (2011 edition)"),
             Map.entry("sakade", "A Guide To Reading and Writing Japanese"),
-            Map.entry("jf_cards", "Japanese Kanji Flashcards (Max Hodges and Tomoko Okazaki)"),
+            Map.entry("jf_cards", "Japanese Kanji Flashcards (Hodges, Okazaki)"),
             Map.entry("henshall3", "A Guide To Reading and Writing Japanese 3rd edition"),
             Map.entry("tutt_cards", "Tuttle Kanji Cards"),
             Map.entry("crowley", "The Kanji Way to Japanese Language Power"),

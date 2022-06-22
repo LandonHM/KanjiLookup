@@ -6,5 +6,4 @@
 
 ## Curl:
 - Proper help message/intro
-- Better formatting for messages
-- More data available
+- Better formatting for main message

@@ -49,7 +49,19 @@ public class KanjiControllerCli {
      */
     @GetMapping(value = "*")
     public @ResponseBody String getKanjiFallback(){
-        return "Here is how to use...";
+        return "\nUsage (replace kanji with either a kanji character or a url encoded kanji character) :" +
+                "\n\t$ curl {url}/{kanji}" +
+                "\n\n\t$ curl {url}/ref/{kanji}" +
+                "\n\n";
+    }
+
+    /**
+     * Returns help
+     * @return String which defines what is returned from a search
+     */
+    @GetMapping(value = "/help")
+    public @ResponseBody String getKanjiHelp(){
+        return "";
     }
 
     /**
@@ -63,7 +75,7 @@ public class KanjiControllerCli {
         KanjiRadicals r = radicalRepo.findRadicalsByKanji(kanji);
         // Cannot find, return error.
         if(k == null || r == null)
-            return "\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n";
+            return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
         //Data from meaning
         String literal = k.getLiteral();
@@ -157,7 +169,7 @@ public class KanjiControllerCli {
 
         // Cannot find, return error.
         if(k == null)
-            return "\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n";
+            return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
         // Data for dictionary references
         Map<String, String> ref = k.getDic_number();

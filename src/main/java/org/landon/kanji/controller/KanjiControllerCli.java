@@ -47,21 +47,15 @@ public class KanjiControllerCli {
      * Default handler, returns help message
      * @return String of data showing how the user search the data they need
      */
-    @GetMapping(value = "*")
+    @GetMapping(value = {"*","/help"})
     public @ResponseBody String getKanjiFallback(){
         return "\nUsage (replace kanji with either a kanji character or a url encoded kanji character) :" +
                 "\n\t$ curl {url}/{kanji}" +
                 "\n\n\t$ curl {url}/ref/{kanji}" +
+                "\n\n\t$ curl {url}/codepoint/{kanji}" +
+                "\n\n\t$ curl {url}/svg/{kanji}" +
+                "\n\t     (this returns an svg file you can either pipe it into an image viewer or into a file}" +
                 "\n\n";
-    }
-
-    /**
-     * Returns help
-     * @return String which defines what is returned from a search
-     */
-    @GetMapping(value = "/help")
-    public @ResponseBody String getKanjiHelp(){
-        return "";
     }
 
     /**
@@ -70,7 +64,7 @@ public class KanjiControllerCli {
      * @return String of data relating to the kanji character
      */
     @GetMapping(value = "/{kanji}")
-    public @ResponseBody String getKanji(@PathVariable(value = "kanji", required = true) String kanji){
+    public @ResponseBody String getKanji(@PathVariable(value = "kanji") String kanji){
         KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
         KanjiRadicals r = radicalRepo.findRadicalsByKanji(kanji);
         // Cannot find, return error.
@@ -78,8 +72,6 @@ public class KanjiControllerCli {
             return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
         //Data from meaning
-        String literal = k.getLiteral();
-        Map<String, String> codepoint = k.getCodepoint();
         Map<String, String> misc = k.getMisc();
         Map<String, String> reading = k.getReading();
         Map<String, String> meaning = k.getMeaning();
@@ -124,7 +116,7 @@ public class KanjiControllerCli {
     //@CrossOrigin()
     @GetMapping(value = "/{kanji}", produces = {"application/json", "application/xml"})
     public @ResponseBody
-    KanjiMeaning getKanjiApplication(@PathVariable(value = "kanji", required = true) String kanji){
+    KanjiMeaning getKanjiApplication(@PathVariable(value = "kanji") String kanji){
         return meaningRepo.findMeaningByLiteral(kanji);
     }
 
@@ -134,7 +126,7 @@ public class KanjiControllerCli {
      * @return A resource which is an svg file of the specified kanji
      */
     @GetMapping(value = "/svg/{kanji}")
-    public ResponseEntity<Resource> getKanjiSvg(@PathVariable(value = "kanji", required = true) String kanji) {
+    public ResponseEntity<Resource> getKanjiSvg(@PathVariable(value = "kanji") String kanji) {
         String fileName = String.format("%1$05x.svg", (int) kanji.charAt(0));
 
         String baseDir = "/home/landon/IdeaProjects/kanji/src/main/resources/static/images/";
@@ -159,12 +151,48 @@ public class KanjiControllerCli {
     }
 
     /**
+     * Gives a string of data relating to a kanji character's codepoints
+     * @param kanji Kanji character which user is looking up
+     * @return Formatted string of related codepoints
+     */
+    @GetMapping(value = {"/codepoint/{kanji}","/code/{kanji}"})
+    public @ResponseBody String getKanjiCode(@PathVariable(value = "kanji") String kanji){
+        KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
+
+        // Cannot find, return error.
+        if(k == null)
+            return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
+
+        // Data for dictionary references
+        Map<String, String> codepoints = k.getCodepoint();
+
+        //Return message to console.
+        StringBuilder out = new StringBuilder("\n");
+        //65
+        out.append(String.format("%1$19s+----+%n", ""));
+        out.append(String.format("%1$19s| %2$s |%n", "", kanji.charAt(0)));
+        out.append(String.format("%1$19s+----+%n", ""));
+        String line = String.format("+%41s+%n", "").replace(" ", "-");
+        out.append(line);
+
+        codepoints.remove("nelson_c");
+        // Used only once, so ignore
+        codepoints.remove("s_h");
+
+        for(Map.Entry<String,String> e : codepoints.entrySet()){
+            out.append(String.format("| %1$-28s : %2$-8s |%n", Dictionary.map.get(e.getKey()), e.getValue()));
+        }
+        out.append(line).append("\n");
+        return out.toString();
+    }
+
+    /**
      * Gives a string of data relating to a kanji character's dictionary references
      * @param kanji Kanji character which user is looking up
      * @return Formatted string of related references
      */
     @GetMapping(value = {"/ref/{kanji}","/dic/{kanji}"})
-    public @ResponseBody String getKanjiRef(@PathVariable(value = "kanji", required = true) String kanji){
+    public @ResponseBody String getKanjiRef(@PathVariable(value = "kanji") String kanji){
         KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
 
         // Cannot find, return error.
@@ -175,17 +203,18 @@ public class KanjiControllerCli {
         Map<String, String> ref = k.getDic_number();
 
         //Return message to console.
-        String out = "\n";
-        out += String.format("%1$31s+----+%1$31s%n", "");
-        out += String.format("%1$31s| %2$s | %1$31s%n", "", kanji.charAt(0));
-        out += String.format("%1$31s+----+%1$31s%n", "");
+        StringBuilder out = new StringBuilder("\n");
+        out.append(String.format("%1$31s+----+%n", ""));
+        out.append(String.format("%1$31s| %2$s |%n", "", kanji.charAt(0)));
+        out.append(String.format("%1$31s+----+%n", ""));
         String line = String.format("+%65s+%n", "").replace(" ", "-");
-        out += line;
+        out.append(line);
+
         for(Map.Entry<String,String> e : ref.entrySet()){
-            out += String.format("| %1$-54s : %2$-6s |%n",Dictionary.map.get(e.getKey()),e.getValue());
+            out.append(String.format("| %1$-54s : %2$-6s |%n", Dictionary.map.get(e.getKey()), e.getValue()));
         }
-        out += line + "\n";
-        return out;
+        out.append(line).append("\n");
+        return out.toString();
     }
 
     /**
@@ -194,7 +223,7 @@ public class KanjiControllerCli {
      * @return returns map which will auto be formatted to xml/json depending on the request
      */
     @GetMapping(value = "/ref/{kanji}", produces = {"application/json", "application/xml"})
-    public @ResponseBody Map<String,String> getKanjiApplicationRef(@PathVariable(value = "kanji", required = true) String kanji){
+    public @ResponseBody Map<String,String> getKanjiApplicationRef(@PathVariable(value = "kanji") String kanji){
         return meaningRepo.findMeaningByLiteral(kanji).getDic_number();
     }
 }

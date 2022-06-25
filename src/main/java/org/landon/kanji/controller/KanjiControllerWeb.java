@@ -8,10 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -40,7 +38,7 @@ public class KanjiControllerWeb {
     /**
      * Default mapping, returns intro page and allows for user input
      * @param model Model spring uses to pass data to thymeleaf
-     * @return
+     * @return default web entrance
      */
     @GetMapping(value = "*", produces = {"text/html"})
     public String getKanji(Model model) {
@@ -53,10 +51,10 @@ public class KanjiControllerWeb {
      * Gets and passes data relating to the kanji which was searched to the webpage
      * @param kanji String representation of kanji character which the user want to search
      * @param model Model spring uses to pass data to thymeleaf
-     * @return
+     * @return results page for a specific kanji
      */
     @GetMapping(value = "/{kanji}", produces = {"text/html"})
-    public String getKanji(@PathVariable(value = "kanji", required = true) String kanji, Model model) {
+    public String getKanji(@PathVariable(value = "kanji") String kanji, Model model) {
         //System.out.println("{kanji} called");
         // The svg files are stored as the characters hex value padded with 0's
         String fileName = String.format("%1$05x.svg", (int) kanji.charAt(0));
@@ -73,18 +71,13 @@ public class KanjiControllerWeb {
     /**
      * Gets called when user enters input or clicks search
      * @param in Input object which is represents the users input in the form (search bar)
-     * @param model Model spring uses to pass data to thymeleaf
      * @return Redirects user to url with encoded character
      */
     @PostMapping(value = "*", produces = {"text/html"})
-    public String getKanji(@ModelAttribute Input in, Model model) {
+    public String getKanji(@ModelAttribute Input in) {
         //System.out.println("\n--MODEL ATTRIBUTE CALLED--\n");
-        try {
-            // Just take the first character and ignore the rest
-            return "redirect:/"+ URLEncoder.encode(in.getKanji().substring(0,1), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return "redirect:/";
-        }
+        // Just take the first character and ignore the rest
+        return "redirect:/"+ URLEncoder.encode(in.getKanji().substring(0,1), StandardCharsets.UTF_8);
     }
 
     @GetMapping(value = "/sources", produces = {"text/html"})

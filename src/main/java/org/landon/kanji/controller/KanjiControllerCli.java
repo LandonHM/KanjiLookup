@@ -16,6 +16,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -54,7 +55,7 @@ public class KanjiControllerCli {
                 "\n\n\t$ curl {url}/ref/{kanji}" +
                 "\n\n\t$ curl {url}/codepoint/{kanji}" +
                 "\n\n\t$ curl {url}/svg/{kanji}" +
-                "\n\t     (this returns an svg file you can either pipe it into an image viewer or into a file}" +
+                "\n\t     (this returns an svg file you can either output it into an image viewer or into a file}" +
                 "\n\n";
     }
 
@@ -82,9 +83,9 @@ public class KanjiControllerCli {
         String radicals = r.getRadicals();
 
         //Return message to console.
-        String out = "\t\t" + k.getLiteral() + "   (" + misc.get("stroke_count") + " strokes)\n";
-        out += "Radicals:\n\t" + radicals + "\n";
+        String out = "\n\t\t" + k.getLiteral() + "(" + misc.get("stroke_count") + "- strokes)\n";
 
+        out += radicals != null ? "\tRadicals: " + radicals + "\n": "";
         out += "Readings: \n";
         temp = reading.get("ja_on");
         out += temp != null ? "\tOn: " + temp + "\n": "";
@@ -163,24 +164,45 @@ public class KanjiControllerCli {
         if(k == null)
             return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
+        OutputFormatter output = new OutputFormatter(kanji);
         // Data for dictionary references
         Map<String, String> codepoints = k.getCodepoint();
-
-        //Return message to console.
-        StringBuilder out = new StringBuilder("\n");
-        //65
-        out.append(String.format("%1$19s+----+%n", ""));
-        out.append(String.format("%1$19s| %2$s |%n", "", kanji.charAt(0)));
-        out.append(String.format("%1$19s+----+%n", ""));
-        String line = String.format("+%41s+%n", "").replace(" ", "-");
-        out.append(line);
 
         codepoints.remove("nelson_c");
         // Used only once, so ignore
         codepoints.remove("s_h");
 
+        Map<String, String[]> temp = new HashMap<>();
+        for(Map.Entry<String,String> e : codepoints.entrySet())
+            temp.put(Dictionary.map.get(e.getKey()), new String[]{e.getValue()});
+        output.addSection("Dictionary", temp);
+
+
+        int i = 0;
+        int nameLen = -1;
+        int valueLen = -1;
         for(Map.Entry<String,String> e : codepoints.entrySet()){
-            out.append(String.format("| %1$-28s : %2$-8s |%n", Dictionary.map.get(e.getKey()), e.getValue()));
+            if(Dictionary.map.get(e.getKey()).length() > nameLen)
+                nameLen = Dictionary.map.get(e.getKey()).length();
+
+            if(e.getValue().length() > valueLen)
+                valueLen = e.getValue().length();
+        }
+        int start = ((nameLen + valueLen) / 2);
+        int totalLen = nameLen + valueLen + 5;
+        //Return message to console.
+        StringBuilder out = new StringBuilder("\n");
+        //65
+        String format = "%1$" + start + "s+----+%n";
+        out.append(String.format(format, ""));
+        out.append(String.format("%1$" + start +"s| %2$s |%n", "", kanji.charAt(0)));
+        out.append(String.format(format, ""));
+        String line = String.format("+%" + totalLen + "s+%n", "").replace(" ", "-");
+        out.append(line);
+
+        format = "| %1$-" + nameLen + "s : %2$-" + valueLen + "s |%n";
+        for(Map.Entry<String,String> e : codepoints.entrySet()){
+            out.append(String.format(format, Dictionary.map.get(e.getKey()), e.getValue()));
         }
         out.append(line).append("\n");
         return out.toString();
@@ -202,16 +224,31 @@ public class KanjiControllerCli {
         // Data for dictionary references
         Map<String, String> ref = k.getDic_number();
 
+        int i = 0;
+        int nameLen = -1;
+        int valueLen = -1;
+        for(Map.Entry<String,String> e : ref.entrySet()){
+            if(Dictionary.map.get(e.getKey()).length() > nameLen)
+                nameLen = Dictionary.map.get(e.getKey()).length();
+
+            if(e.getValue().length() > valueLen)
+                valueLen = e.getValue().length();
+        }
+        int start = ((nameLen + valueLen) / 2);
+        int totalLen = nameLen + valueLen + 5;
         //Return message to console.
         StringBuilder out = new StringBuilder("\n");
-        out.append(String.format("%1$31s+----+%n", ""));
-        out.append(String.format("%1$31s| %2$s |%n", "", kanji.charAt(0)));
-        out.append(String.format("%1$31s+----+%n", ""));
-        String line = String.format("+%65s+%n", "").replace(" ", "-");
+        //65
+        String format = "%1$" + start + "s+----+%n";
+        out.append(String.format(format, ""));
+        out.append(String.format("%1$" + start +"s| %2$s |%n", "", kanji.charAt(0)));
+        out.append(String.format(format, ""));
+        String line = String.format("+%" + totalLen + "s+%n", "").replace(" ", "-");
         out.append(line);
 
+        format = "| %1$-" + nameLen + "s : %2$-" + valueLen + "s |%n";
         for(Map.Entry<String,String> e : ref.entrySet()){
-            out.append(String.format("| %1$-54s : %2$-6s |%n", Dictionary.map.get(e.getKey()), e.getValue()));
+            out.append(String.format(format, Dictionary.map.get(e.getKey()), e.getValue()));
         }
         out.append(line).append("\n");
         return out.toString();

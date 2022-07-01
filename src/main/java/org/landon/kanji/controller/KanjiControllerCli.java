@@ -72,41 +72,54 @@ public class KanjiControllerCli {
         if(k == null || r == null)
             return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
-        //Data from meaning
-        Map<String, String> misc = k.getMisc();
-        Map<String, String> reading = k.getReading();
+        OutputFormatter output = new OutputFormatter(kanji);
         Map<String, String> meaning = k.getMeaning();
+        Map<String, String> reading = k.getReading();
+        Map<String, String> misc = k.getMisc();
+        Map<String, String[]> temp = new HashMap<>();
+
+        // Add reading section
+        if(reading.containsKey("ja_on"))
+            temp.put("Onyomi", reading.get("ja_on").split(","));
+        if(reading.containsKey("ja_kun"))
+            temp.put("Kunyomi", reading.get("ja_kun").split(","));
+        output.addSection("Reading", temp, Lang.JP);
+        // Add misc.rad_name
+        temp = new HashMap<>();
+
+        // Add meaning section
+        //   From the data, all kanji have an english meaning
+        //   Kanji may also have French, Spanish, and Portuguese
+        //   en, pt, fr, es
+        HashMap<String, String> langs = new HashMap<String, String>(4);
+        langs.put("en", "English"); langs.put("fr", "French");
+        langs.put("es", "Spanish"); langs.put("pt", "Portuguese");
+        for(Map.Entry<String,String> entry: langs.entrySet())
+            if(meaning.containsKey(entry.getKey()))
+                temp.put(entry.getValue(), meaning.get(entry.getKey()).split(","));
+        output.addSection("Meaning", temp, Lang.EN);
+        temp = new HashMap<>();
+
+        // Add Misc section
+        temp.put("Strokes", new String[]{misc.get("stroke_count")});
+        HashMap<String, String> miscMap = new HashMap<String, String>(4);
+        miscMap.put("grade", "Grade");
+        miscMap.put("freq", "Frequency");
+        miscMap.put("jlpt", "JLPT");
+        for(Map.Entry<String,String> entry: miscMap.entrySet())
+            if(misc.containsKey(entry.getKey()))
+                temp.put(entry.getValue(), misc.get(entry.getKey()).split(","));
+        output.addSection("Misc", temp, Lang.EN);
+        temp = new HashMap<>();
+
+        // Add nanori section if it exists
         String nanori = k.getNanori();
-        String temp;
+        if(nanori != null){
+            temp.put("Reading", nanori.split(","));
+            output.addSection("Nanori", temp, Lang.JP);
+        }
 
-        //Data from radicals
-        String radicals = r.getRadicals();
-
-        //Return message to console.
-        String out = "\n\t\t" + k.getLiteral() + "(" + misc.get("stroke_count") + "- strokes)\n";
-
-        out += radicals != null ? "\tRadicals: " + radicals + "\n": "";
-        out += "Readings: \n";
-        temp = reading.get("ja_on");
-        out += temp != null ? "\tOn: " + temp + "\n": "";
-        temp = reading.get("ja_kun");
-        out += temp != null ? "\tKun: " + temp + "\n": "";
-
-        out += "Meaning: \n";
-        temp = meaning.get("en");
-        out += temp != null ? "\t" + temp + "\n" : "";
-
-        out += nanori != null ? "Name Readings: " + nanori + "\n" : "";
-
-        out += "Misc: \n";
-        temp = misc.get("grade");
-        out += temp != null ? "\tGrade: " + temp + "\n": "";
-        temp = misc.get("freq");
-        out += temp != null ? "\tFrequency: " + temp + "/2500 in newspapers\n": "";
-        temp = misc.get("jlpt");
-        out += temp != null ? "\tJLPT Level: " + temp + "\n": "";
-
-        return out;
+        return output.toString();
     }
 
     /**
@@ -165,7 +178,7 @@ public class KanjiControllerCli {
             return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
         OutputFormatter output = new OutputFormatter(kanji);
-        // Data for dictionary references
+        // Data for codepoints
         Map<String, String> codepoints = k.getCodepoint();
 
         codepoints.remove("nelson_c");
@@ -175,37 +188,9 @@ public class KanjiControllerCli {
         Map<String, String[]> temp = new HashMap<>();
         for(Map.Entry<String,String> e : codepoints.entrySet())
             temp.put(Dictionary.map.get(e.getKey()), new String[]{e.getValue()});
-        output.addSection("Dictionary", temp);
+        output.addSection("Codepoints", temp, Lang.EN);
 
-
-        int i = 0;
-        int nameLen = -1;
-        int valueLen = -1;
-        for(Map.Entry<String,String> e : codepoints.entrySet()){
-            if(Dictionary.map.get(e.getKey()).length() > nameLen)
-                nameLen = Dictionary.map.get(e.getKey()).length();
-
-            if(e.getValue().length() > valueLen)
-                valueLen = e.getValue().length();
-        }
-        int start = ((nameLen + valueLen) / 2);
-        int totalLen = nameLen + valueLen + 5;
-        //Return message to console.
-        StringBuilder out = new StringBuilder("\n");
-        //65
-        String format = "%1$" + start + "s+----+%n";
-        out.append(String.format(format, ""));
-        out.append(String.format("%1$" + start +"s| %2$s |%n", "", kanji.charAt(0)));
-        out.append(String.format(format, ""));
-        String line = String.format("+%" + totalLen + "s+%n", "").replace(" ", "-");
-        out.append(line);
-
-        format = "| %1$-" + nameLen + "s : %2$-" + valueLen + "s |%n";
-        for(Map.Entry<String,String> e : codepoints.entrySet()){
-            out.append(String.format(format, Dictionary.map.get(e.getKey()), e.getValue()));
-        }
-        out.append(line).append("\n");
-        return out.toString();
+        return output.toString();
     }
 
     /**
@@ -221,37 +206,18 @@ public class KanjiControllerCli {
         if(k == null)
             return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
+        OutputFormatter output = new OutputFormatter(kanji);
+
         // Data for dictionary references
         Map<String, String> ref = k.getDic_number();
 
-        int i = 0;
-        int nameLen = -1;
-        int valueLen = -1;
-        for(Map.Entry<String,String> e : ref.entrySet()){
-            if(Dictionary.map.get(e.getKey()).length() > nameLen)
-                nameLen = Dictionary.map.get(e.getKey()).length();
+        Map<String, String[]> temp = new HashMap<>();
+        for(Map.Entry<String,String> e : ref.entrySet())
+            temp.put(Dictionary.map.get(e.getKey()), new String[]{e.getValue()});
+        output.addSection("Dictionary", temp, Lang.EN);
 
-            if(e.getValue().length() > valueLen)
-                valueLen = e.getValue().length();
-        }
-        int start = ((nameLen + valueLen) / 2);
-        int totalLen = nameLen + valueLen + 5;
-        //Return message to console.
-        StringBuilder out = new StringBuilder("\n");
-        //65
-        String format = "%1$" + start + "s+----+%n";
-        out.append(String.format(format, ""));
-        out.append(String.format("%1$" + start +"s| %2$s |%n", "", kanji.charAt(0)));
-        out.append(String.format(format, ""));
-        String line = String.format("+%" + totalLen + "s+%n", "").replace(" ", "-");
-        out.append(line);
+        return output.toString();
 
-        format = "| %1$-" + nameLen + "s : %2$-" + valueLen + "s |%n";
-        for(Map.Entry<String,String> e : ref.entrySet()){
-            out.append(String.format(format, Dictionary.map.get(e.getKey()), e.getValue()));
-        }
-        out.append(line).append("\n");
-        return out.toString();
     }
 
     /**

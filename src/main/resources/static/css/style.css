@@ -6,8 +6,7 @@ body{
     position: relative;
 }
 
-
-.row {
+.content {
     margin: 0 auto;
     width: 80%;
     max-width: 60em;
@@ -90,12 +89,19 @@ li {
 }
 
 img {
-
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
 
+@media (max-width: 800) {
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 80%;
+    }
 }
 
 .center {
@@ -116,4 +122,32 @@ code {
 
 h3 + p {
     padding-left: 10px;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+
+    margin: 0;
+    padding: 0;
+}
+
+.flex > * {
+    flex-grow: 1;
+}
+
+p {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.literal {
+    margin-bottom: 0px;
+    font-size: 50px;
+}
+
+.meaning {
+    font-size: 48px;
 }

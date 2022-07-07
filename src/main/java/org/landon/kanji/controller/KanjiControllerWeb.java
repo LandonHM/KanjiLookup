@@ -47,6 +47,12 @@ public class KanjiControllerWeb {
         return "index.html";
     }
 
+    @GetMapping(value={"/error", "/Error"})
+    public String getError(Model model){
+        model.addAttribute("input", new Input());
+        return "error";
+    }
+
     /**
      * Gets and passes data relating to the kanji which was searched to the webpage
      * @param kanji String representation of kanji character which the user want to search

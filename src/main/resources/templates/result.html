@@ -17,13 +17,13 @@
         </div>
     </form>
     <div th:if="${meaning}" class="results">
-        <div class="flex">
+        <div class="flex flex-center">
             <div class="kanji">
                 <p class="literal center" th:text="${meaning.literal}">Kanji</p>
                 <p th:text="|Radicals - ${radicals.radicals}|">Radicals</p>
             </div>
             <div class="meaning center">
-                <p th:text="${#strings.arrayJoin(meaning.meaning.en,', ')}"></p>
+                <p th:text="${#strings.arrayJoin(meaning.meaning.en,', ')}">Meaning</p>
             </div>
             <div class="misc">
                 <p th:if="${#maps.containsKey(meaning.misc,'grade')}" th:text="|Grade - ${meaning.misc.grade}|">Grade</p>
@@ -31,7 +31,13 @@
                 <p th:if="${#maps.containsKey(meaning.misc,'jlpt')}" th:text="|JLPT Level ${meaning.misc.jlpt}|">jlpt</p>
             </div>
         </div>
-        <img th:src="@{'/images/'+${filename}}" th:attr="alt=@{'Stroke Count - '+${meaning.misc.stroke_count}}">
+        <div class="flex flex-top">
+            <div class="readings">
+                <p th:if="${#maps.containsKey(meaning.reading,'ja_on')}" th:text="|Onyomi - ${#strings.arrayJoin(meaning.reading.ja_on, ', ')}|">Onyomi</p>
+                <p th:if="${#maps.containsKey(meaning.reading,'ja_kun')}" th:text="|Kunyomi - ${#strings.arrayJoin(meaning.reading.ja_kun, ', ')}|">Kunyomi</p>
+            </div>
+            <img th:src="@{'/images/'+${filename}}" th:attr="alt=@{'Stroke Count - '+${meaning.misc.stroke_count}}">
+        </div>
 
         <!--
         <ul>

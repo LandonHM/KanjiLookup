@@ -73,16 +73,16 @@ public class KanjiControllerCli {
             return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
         OutputFormatter output = new OutputFormatter(kanji);
-        Map<String, String> meaning = k.getMeaning();
-        Map<String, String> reading = k.getReading();
+        Map<String, String[]> meaning = k.getMeaning();
+        Map<String, String[]> reading = k.getReading();
         Map<String, String> misc = k.getMisc();
         Map<String, String[]> temp = new HashMap<>();
 
         // Add reading section
         if(reading.containsKey("ja_on"))
-            temp.put("Onyomi", reading.get("ja_on").split(","));
+            temp.put("Onyomi", reading.get("ja_on"));
         if(reading.containsKey("ja_kun"))
-            temp.put("Kunyomi", reading.get("ja_kun").split(","));
+            temp.put("Kunyomi", reading.get("ja_kun"));
         output.addSection("Reading", temp, Lang.JP);
         // Add misc.rad_name
         temp = new HashMap<>();
@@ -96,7 +96,7 @@ public class KanjiControllerCli {
         langs.put("es", "Spanish"); langs.put("pt", "Portuguese");
         for(Map.Entry<String,String> entry: langs.entrySet())
             if(meaning.containsKey(entry.getKey()))
-                temp.put(entry.getValue(), meaning.get(entry.getKey()).split(","));
+                temp.put(entry.getValue(), meaning.get(entry.getKey()));
         output.addSection("Meaning", temp, Lang.EN);
         temp = new HashMap<>();
 
@@ -113,9 +113,9 @@ public class KanjiControllerCli {
         temp = new HashMap<>();
 
         // Add nanori section if it exists
-        String nanori = k.getNanori();
+        String[] nanori = k.getNanori();
         if(nanori != null){
-            temp.put("Reading", nanori.split(","));
+            temp.put("Reading", nanori);
             output.addSection("Nanori", temp, Lang.JP);
         }
 

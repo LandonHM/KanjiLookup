@@ -23,7 +23,7 @@
                 <p th:text="|Radicals - ${radicals.radicals}|">Radicals</p>
             </div>
             <div class="meaning center">
-                <p th:text="${#strings.arrayJoin(#strings.arraySplit(meaning.meaning.en, ','),', ')}"></p>
+                <p th:text="${#strings.arrayJoin(meaning.meaning.en,', ')}"></p>
             </div>
             <div class="misc">
                 <p th:if="${#maps.containsKey(meaning.misc,'grade')}" th:text="|Grade - ${meaning.misc.grade}|">Grade</p>

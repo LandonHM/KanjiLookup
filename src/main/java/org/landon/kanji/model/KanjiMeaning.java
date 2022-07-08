@@ -17,12 +17,12 @@ public class KanjiMeaning {
     private Map<String, String> misc;
     private Map<String, String> dic_number;
     private Map<String, String> query_code;
-    private Map<String, String> reading;
-    private Map<String, String> meaning;
-    private String nanori;
+    private Map<String, String[]> reading;
+    private Map<String, String[]> meaning;
+    private String[] nanori;
 
 
-    public KanjiMeaning(String id, String literal, Map<String, String> codepoint, Map<String, String> radical, Map<String, String> misc, Map<String, String> dic_number, Map<String, String> query_code, Map<String, String> reading, Map<String, String> meaning, String nanori) {
+    public KanjiMeaning(String id, String literal, Map<String, String> codepoint, Map<String, String> radical, Map<String, String> misc, Map<String, String> dic_number, Map<String, String> query_code, Map<String, String[]> reading, Map<String, String[]> meaning, String[] nanori) {
         this.id = id;
         this.literal = literal;
         this.codepoint = codepoint;
@@ -63,15 +63,15 @@ public class KanjiMeaning {
         return query_code;
     }
 
-    public Map<String, String> getReading() {
+    public Map<String, String[]> getReading() {
         return reading;
     }
 
-    public Map<String, String> getMeaning() {
+    public Map<String, String[]> getMeaning() {
         return meaning;
     }
 
-    public String getNanori() {
+    public String[] getNanori() {
         return nanori;
     }
 }

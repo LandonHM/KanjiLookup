@@ -122,6 +122,17 @@ public class KanjiControllerCli {
         return output.toString();
     }
 
+    @GetMapping(value = "/en/{en}")
+    public @ResponseBody String getKanjiFromEn(@PathVariable(value = "en") String english){
+        KanjiMeaning[] results = meaningRepo.findMeaningByEnMeaning(english);
+        StringBuilder sb = new StringBuilder();
+        for(KanjiMeaning m : results){
+            sb.append(m.getLiteral());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     /**
      * Gives xml/json data relating to the meaning of a kanji character
      * @param kanji Kanji character which user is looking up

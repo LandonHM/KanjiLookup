@@ -53,10 +53,14 @@ public class KanjiControllerWeb {
         return "error";
     }
 
-    @GetMapping(value = {"/error/{kanji}, /Error/{kanji}"})
+    @GetMapping(value = "/error/{kanji}")
+    public String geterrorKanji(@PathVariable(value = "kanji") String kanji, Model model) {
+        model.addAttribute("badString", kanji);
+        return "error.html";
+    }
+
+    @GetMapping(value = "/Error/{kanji}")
     public String getErrorKanji(@PathVariable(value = "kanji") String kanji, Model model) {
-        //System.out.println("{kanji} called");
-        // The svg files are stored as the characters hex value padded with 0's
         model.addAttribute("badString", kanji);
         return "error.html";
     }

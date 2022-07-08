@@ -53,6 +53,14 @@ public class KanjiControllerWeb {
         return "error";
     }
 
+    @GetMapping(value = {"/error/{kanji}, /Error/{kanji}"})
+    public String getErrorKanji(@PathVariable(value = "kanji") String kanji, Model model) {
+        //System.out.println("{kanji} called");
+        // The svg files are stored as the characters hex value padded with 0's
+        model.addAttribute("badString", kanji);
+        return "error.html";
+    }
+
     /**
      * Gets and passes data relating to the kanji which was searched to the webpage
      * @param kanji String representation of kanji character which the user want to search
@@ -83,7 +91,11 @@ public class KanjiControllerWeb {
     public String getKanji(@ModelAttribute Input in) {
         //System.out.println("\n--MODEL ATTRIBUTE CALLED--\n");
         // Just take the first character and ignore the rest
-        return "redirect:/"+ URLEncoder.encode(in.getKanji().substring(0,1), StandardCharsets.UTF_8);
+        try{
+            return "redirect:/"+ URLEncoder.encode(in.getKanji().substring(0,1), StandardCharsets.UTF_8);
+        }catch(Exception e){
+            return "redirect:/error/" + in.getKanji();
+        }
     }
 
     @GetMapping(value = "/sources", produces = {"text/html"})

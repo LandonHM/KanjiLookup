@@ -84,10 +84,6 @@ dd {
     padding-top: 15px;
 }
 
-li {
-    margin-top: 5px;
-}
-
 img {
   display: block;
   margin-left: auto;
@@ -167,4 +163,50 @@ p {
 
 .readings {
     font-size: 28px;
+}
+
+.references {
+    margin: 20px 0;
+}
+
+.link {
+    padding: 16px 16px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.flex-links {
+    display: flex;
+    flex-wrap: wrap;
+
+    margin: 0;
+    padding: 0;
+}
+
+.flex-links > * {
+    flex-grow: 1;
+    /* To better see borders of elements inside the flex
+    border-style:solid;
+    border-color:#287EC7; */
+}
+
+.hidden{
+    display: none;
+}
+
+.show{
+    visibility: visible;
+}
+
+table, td, th {
+    border: 2px solid;
+}
+
+td {
+    padding: 4px;
+}
+
+table{
+    margin: 0 auto;
+    border-collapse: collapse;
 }

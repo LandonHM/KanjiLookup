@@ -39,34 +39,53 @@
             <img th:src="@{'/images/'+${filename}}" th:attr="alt=@{'(Image not found) Stroke Count: '+${meaning.misc.stroke_count}}">
         </div>
 
-        <!--
-        <ul>
-            <li>Dictionary References</li>
-            <li>Query Code</li>
-            <li>Codepoints</li>
-        </ul>
-        <table>
-            <tr th:each="dicEntry : ${meaning.dic_number}">
-                <td th:text="${dicEntry.key}">Key</td>
-                <td th:text="${dicEntry.value}">Value</td>
-            </tr>
-        </table>
-        <table>
-            <tr th:each="dicEntry : ${meaning.query_code}">
-                <td th:text="${dicEntry.key}">Key</td>
-                <td th:text="${dicEntry.value}">Value</td>
-            </tr>
-        </table>
-        <table>
-            <tr th:each="dicEntry : ${meaning.codepoint}">
-                <td th:text="${dicEntry.key}">Key</td>
-                <td th:text="${dicEntry.value}">Value</td>
-            </tr>
-        </table>
+        <!-- js to make dictionaries hide/show when id is clicked -->
+        <script th:inline="javascript">
+                const tables = ['dictionary', 'querycode', 'codepoint'];
+                function showTable(id){
+                    tables.forEach( (name) => {
+                        if(name != id){
+                            document.getElementById(name).className = "hidden";
+                            document.getElementById(name+"Title").className = "center hidden";
+                        }
+                        else{
+                            document.getElementById(name).className = "show";
+                            document.getElementById(name+"Title").className = "center show";
+                        }
+                    });
+                }
+        </script>
+        <div class="references">
+            <div class="flex-links flex-center sb">
+                    <a onclick="showTable('dictionary')" class="link center">Dictionary References</a>
+                    <a onclick="showTable('querycode')" class="link center">Query Code</a>
+                    <a onclick="showTable('codepoint')" class="link center">Codepoints</a>
+            </div>
+            <p id="dictionaryTitle" class="center hidden">Dictionary References</p>
+            <table id="dictionary" class="hidden">
+                <tr th:each="dicEntry : ${meaning.dic_number}">
+                    <td th:text="${dicEntry.key}">Key</td>
+                    <td th:text="${dicEntry.value}">Value</td>
+                </tr>
+            </table>
+            <p id="querycodeTitle" class="center hidden">Query codes</p>
+            <table id="querycode" class="hidden">
+                <tr th:each="dicEntry : ${meaning.query_code}">
+                    <td th:text="${dicEntry.key}">Key</td>
+                    <td th:text="${dicEntry.value}">Value</td>
+                </tr>
+            </table>
+            <p id="codepointTitle" class="center hidden">Codepoints</p>
+            <table id="codepoint" class="hidden">
+                <tr th:each="dicEntry : ${meaning.codepoint}">
+                    <td th:text="${dicEntry.key}">Key</td>
+                    <td th:text="${dicEntry.value}">Value</td>
+                </tr>
+            </table>
+        </div>
     </div>
     <div th:unless="${meaning}" class="results">
         <p>Could not find '[[${kanji}]]' in the database</p>
-    </div> -->
     </div>
 </div>
 </body>

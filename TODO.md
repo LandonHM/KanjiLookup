@@ -1,8 +1,13 @@
 # TODO:
 
+## General:
+- Add meanings from full dictionary
+
 ## Cli:
-- Fix error for 日 (-) not properly formatted
+-
 
 ## Web:
-- Add and format references/codepoints
+- En lookup (may require some db work for case insenitivity)
+- Lacking images (mostly googling)
+- Add and format references/codepoints (css stuff + maybe some smol js)
 - maybe footer with info, or header

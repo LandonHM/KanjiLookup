@@ -69,7 +69,7 @@ public class KanjiControllerCli {
         KanjiMeaning k = meaningRepo.findMeaningByLiteral(kanji);
         KanjiRadicals r = radicalRepo.findRadicalsByKanji(kanji);
         // Cannot find, return error.
-        if(k == null || r == null)
+        if(k == null)
             return "\n\u001b[31mError:\u001b[0m Character \"" + kanji + "\" not found.\n\n";
 
         OutputFormatter output = new OutputFormatter(kanji);
@@ -117,6 +117,13 @@ public class KanjiControllerCli {
         if(nanori != null){
             temp.put("Reading", nanori);
             output.addSection("Nanori", temp, Lang.JP);
+        }
+        temp = new HashMap<>();
+
+        // Add radical section if there is an entry in db
+        if(r != null){
+            temp.put("", r.getRadicals().split(" "));
+            output.addSection("Radicals", temp, Lang.JP);
         }
 
         return output.toString();

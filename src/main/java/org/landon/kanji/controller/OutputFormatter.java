@@ -63,8 +63,6 @@ public class OutputFormatter {
         //if(sections.size() == 0)
         //return null;
 
-        //Empty line will be used quite often so just save it.
-        String emptyLine = String.format(" │%1$" + (2+maxHeadLen) + "s│%1$" + (maxDataLen+2) + "s│%n", "");
 
         // Used to build the output
         StringBuilder out = new StringBuilder("\n");
@@ -78,6 +76,9 @@ public class OutputFormatter {
         out.append(String.format("%" + padding + "s┌────┐%n", ""));
         out.append(String.format("%" + padding + "s│ %s │%n", "", title));
         out.append(String.format("%" + padding + "s└────┘%n", ""));
+
+        //Empty line will be used quite often so just save it.
+        String emptyLine = String.format(" │%1$" + (2+maxHeadLen) + "s│%1$" + (maxDataLen+2) + "s│%n", "");
 
         //Top line
         out.append(" ");
@@ -96,11 +97,11 @@ public class OutputFormatter {
                     }
                 }else{
                     data = e.getValue()[0];
-                    langPad = (data.indexOf('.') > 0 ? 1 : 0) + (data.indexOf('-') > 0 ? 1 : 0);
+                    langPad = (data.indexOf('.') >= 0 ? 1 : 0) + (data.indexOf('-') >= 0 ? 1 : 0);
                     out.append(String.format(" │ %-" + maxHeadLen + "s │ %-" + (maxDataLen - data.length() + langPad) + "s │%n", e.getKey(), e.getValue()[0]));
                     for (int i = 1; i < e.getValue().length; i++) {
                         data = e.getValue()[i];
-                        langPad = (data.indexOf('.') > 0 ? 1 : 0) + (data.indexOf('-') > 0 ? 1 : 0);
+                        langPad = (data.indexOf('.') >= 0 ? 1 : 0) + (data.indexOf('-') >= 0 ? 1 : 0);
                         out.append(String.format(" │ %" + maxHeadLen + "s │ %-" + (maxDataLen - data.length() + langPad) + "s │%n", "", e.getValue()[i]));
                     }
                 }
@@ -145,9 +146,9 @@ class Section {
                 if(lang == Lang.JP){
                     // If Japanese text, then the print size will be double the length (minus any non double wide characters there may be)
                     len = 2*s.length();
-                    if(s.indexOf('.') > 0)
+                    if(s.indexOf('.') >= 0)
                         len--;
-                    if(s.indexOf('-') > 0)
+                    if(s.indexOf('-') >= 0)
                         len--;
                 }else{
                     // If english text, then the print size and length are equal

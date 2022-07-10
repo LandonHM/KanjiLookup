@@ -8,11 +8,17 @@
 </head>
 <body>
 <div class="content">
+    <div class="center">
+        <a th:href="@{~/}">
+            <img class="logo" th:src="@{'/images/logo.svg'}" th:attr="alt=Logo">
+        </a>
+    </div>
     <form class="searchmain" method="post" th:action="@{/}" th:object="${input}">
         <div class="inner">
             <input class="button" type="submit" value="Search"/>
             <div class="textin">
-                <input class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autoCapitalize="off" autoComplete="off" spellCheck="false"  placeholder="Enter Kanji Character" />
+                <input th:if="${meaning}" class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${kanji}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character" />
+                <input th:unless="${meaning}" class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"  placeholder="Enter Kanji Character" />
             </div>
         </div>
     </form>
@@ -36,11 +42,12 @@
                 <p th:if="${#maps.containsKey(meaning.reading,'ja_on')}" th:text="|Onyomi - ${#strings.arrayJoin(meaning.reading.ja_on, ', ')}|">Onyomi</p>
                 <p th:if="${#maps.containsKey(meaning.reading,'ja_kun')}" th:text="|Kunyomi - ${#strings.arrayJoin(meaning.reading.ja_kun, ', ')}|">Kunyomi</p>
             </div>
-            <img th:src="@{'/images/'+${filename}}" th:attr="alt=@{'(Image not found) Stroke Count: '+${meaning.misc.stroke_count}}">
+            <img class="strokes" th:src="@{'/images/'+${filename}}" th:attr="alt=@{'(Image not found) Stroke Count: '+${meaning.misc.stroke_count}}">
         </div>
 
-        <!-- js to make dictionaries hide/show when id is clicked -->
-        <script th:inline="javascript">
+        <div class="references">
+            <!-- js to make dictionaries hide/show when id is clicked -->
+            <script th:inline="javascript">
                 const tables = ['dictionary', 'querycode', 'codepoint'];
                 function showTable(id){
                     tables.forEach( (name) => {
@@ -54,8 +61,7 @@
                         }
                     });
                 }
-        </script>
-        <div class="references">
+            </script>
             <div class="flex-links flex-center sb">
                     <a onclick="showTable('dictionary')" class="link center">Dictionary References</a>
                     <a onclick="showTable('querycode')" class="link center">Query Code</a>
@@ -83,9 +89,12 @@
                 </tr>
             </table>
         </div>
+        <div class="foot">
+            <a href="/sources">Click here for data sources</a>
+        </div>
     </div>
     <div th:unless="${meaning}" class="results">
-        <p>Could not find '[[${kanji}]]' in the database</p>
+        <p style="margin-top: 20px; font-size: 20px;">Could not find '[[${kanji}]]' in the database</p>
     </div>
 </div>
 </body>

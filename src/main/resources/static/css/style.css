@@ -7,10 +7,16 @@ body{
 }
 
 .content {
+    padding-top: 15px;
     margin: 0 auto;
     width: 80%;
     max-width: 60em;
     display: table;
+}
+
+.logo{
+    width: 20%;
+    max-width: 20%;
 }
 
 .searchmain {
@@ -22,7 +28,7 @@ body{
     display: block;
     border-radius: 5px;
     background-color: #6e6e6e;
-    margin-top: 25px;
+    margin-top: 10px;
     padding: 3px;
     box-sizing: content-box;
 }
@@ -80,11 +86,12 @@ dd {
     border-radius: 4px;
 }
 
-#intro {
+.intro {
     padding-top: 15px;
+    font-size: 20px;
 }
 
-img {
+.strokes {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -92,15 +99,6 @@ img {
   max-width: 60%;
 }
 
-@media (max-width: 800) {
-    img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 95%;
-      max-width: 100%;
-    }
-}
 
 .center {
     text-align: center;
@@ -141,9 +139,9 @@ h3 + p {
 
 .flex > * {
     flex-grow: 1;
-    /* To better see borders of elements inside the flex */
+    /* To better see borders of elements inside the flex
     border-style:solid;
-    border-color:#287EC7;
+    border-color:#287EC7; */
 }
 
 p {
@@ -173,6 +171,20 @@ p {
     padding: 16px 16px;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.flex-head {
+    display: flex;
+    /*flex-wrap: wrap; */
+    margin: 0;
+    padding: 0;
+}
+
+.flex-head > * {
+    flex-grow: 1;
+    /* To better see borders of elements inside the flex
+    border-style:solid;
+    border-color:#287EC7; */
 }
 
 .flex-links {
@@ -209,4 +221,27 @@ td {
 table{
     margin: 0 auto;
     border-collapse: collapse;
+}
+
+.foot{
+    padding-bottom: 20px;
+}
+
+li {
+    padding: 3px 0px;
+}
+
+@media all and (max-width: 800px) {
+    .logo{
+        width: 30%;
+        max-width: 30%;
+    }
+
+    .strokes {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 60%;
+      max-width: 70%;
+    }
 }

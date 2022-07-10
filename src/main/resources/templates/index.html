@@ -8,6 +8,11 @@
 </head>
 <body>
 <div class="content">
+    <div class="center">
+        <a th:href="@{~/}">
+            <img class="logo" th:src="@{'/images/logo.svg'}" th:attr="alt=Logo">
+        </a>
+    </div>
     <form class="searchmain" method="post" th:action="@{/}" th:object="${input}">
         <div class="inner">
             <input class="button" type="submit" value="Search"/>
@@ -16,7 +21,7 @@
             </div>
         </div>
     </form>
-    <div id="intro">
+    <div class="intro">
         <p class="center">Welcome!</p>
         <p>How to use: </p>
         <ul>
@@ -30,6 +35,9 @@
                 <li><code>~/$ curl (url)</code></li>
             </ul>
         </ul>
+    </div>
+    <div class="foot" style="font-size: 20px">
+        <a href="/sources">Click here for data sources</a>
     </div>
 </div>
 </body>

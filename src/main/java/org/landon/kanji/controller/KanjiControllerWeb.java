@@ -95,16 +95,28 @@ public class KanjiControllerWeb {
     public String getKanji(@ModelAttribute Input in) {
         //System.out.println("\n--MODEL ATTRIBUTE CALLED--\n");
         // Just take the first character and ignore the rest
-        try{
-            return "redirect:/"+ URLEncoder.encode(in.getKanji().substring(0,1), StandardCharsets.UTF_8);
-        }catch(Exception e){
-            return "redirect:/error/" + in.getKanji();
+        String input = in.getKanji();
+
+        if(input == null)
+            return "redirect:/";
+
+        if(isEnglish(input)){
+            return "redirect:/" + input;
+        }else{
+            return "redirect:/"+ URLEncoder.encode(input.substring(0,1), StandardCharsets.UTF_8);
         }
     }
 
     @GetMapping(value = "/sources", produces = {"text/html"})
     public String getSources(Model model) {
         return "sources.html";
+    }
+
+    private boolean isEnglish(String s){
+        for(char c : s.toCharArray())
+            if((int) c > 128)
+                return false;
+        return true;
     }
 
 }

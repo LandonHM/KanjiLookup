@@ -77,7 +77,7 @@ public class KanjiControllerWeb {
         // The svg files are stored as the characters hex value padded with 0's
         String fileName = String.format("%1$05x.svg", (int) kanji.charAt(0));
 
-        model.addAttribute("kanji", kanji);
+        model.addAttribute("search", kanji);
         model.addAttribute("filename", fileName);
         model.addAttribute("meaning", meaningRepo.findMeaningByLiteral(kanji));
         model.addAttribute("radicals", radicalRepo.findRadicalsByKanji(kanji));

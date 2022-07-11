@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[[${kanji}]] - Results</title>
+    <title>[[${search}]] - Results</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -17,8 +17,7 @@
         <div class="inner">
             <input class="button" type="submit" value="Search"/>
             <div class="textin">
-                <input th:if="${meaning}" class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${kanji}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character" />
-                <input th:unless="${meaning}" class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false"  placeholder="Enter Kanji Character" />
+                <input class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${search}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character" />
             </div>
         </div>
     </form>

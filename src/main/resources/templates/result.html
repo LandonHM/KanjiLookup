@@ -17,8 +17,13 @@
         <div class="inner">
             <input class="button" type="submit" value="Search"/>
             <div class="textin">
-                <input class="search" type="text" name="kanji" id="kanji" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${search}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character" />
+                <input class="search" type="text" name="search" id="search" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${search}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character" />
             </div>
+            <!-- For some reason th:attr="value=${search}" and th:value="${search}" didn't work so i need javascript -->
+            <script th:inline="javascript">
+                document.getElementById("search").value = [[${search}]];
+            </script>
+
         </div>
     </form>
     <div th:if="${meaning}" class="results">

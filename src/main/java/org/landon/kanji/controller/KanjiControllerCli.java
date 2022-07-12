@@ -16,6 +16,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,13 +132,29 @@ public class KanjiControllerCli {
 
     @GetMapping(value = "/en/{en}")
     public @ResponseBody String getKanjiFromEn(@PathVariable(value = "en") String english){
+        StringBuilder output = new StringBuilder();
+        output.append("\n\t\t");
+        output.append(english);
+        output.append("\n");
+
         KanjiMeaning[] results = meaningRepo.findMeaningByEnMeaning(english);
-        StringBuilder sb = new StringBuilder();
+        // Sort by frequency
+        // If both don't have frequency compare stoke counts
+        Arrays.sort(results, (a, b) -> {
+            int i = Integer.parseInt(a.getMisc().getOrDefault("freq", String.valueOf(Integer.parseInt(a.getMisc().get("stroke_count")) + 2501)));
+            int j = Integer.parseInt(b.getMisc().getOrDefault("freq", String.valueOf(Integer.parseInt(b.getMisc().get("stroke_count")) + 2501)));
+            return Integer.compare(i,j);
+        });
+
         for(KanjiMeaning m : results){
-            sb.append(m.getLiteral());
-            sb.append("\n");
+            output.append("\t");
+            output.append(m.getLiteral());
+            output.append(": ");
+            output.append(String.join(", ", m.getMeaning().get("en")));
+            output.append("\n");
         }
-        return sb.toString();
+        output.append("\n");
+        return output.toString();
     }
 
     /**

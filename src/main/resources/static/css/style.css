@@ -129,6 +129,20 @@ h3 + p {
     padding: 0;
 }
 
+.flex-col {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+
+    margin: 15px 0 0 0;
+    padding: 0;
+}
+
+.flex-col > * {
+    flex-grow: 1;
+}
+
 .flex-center {
     align-items: center;
 }
@@ -196,7 +210,7 @@ p {
 }
 
 .flex-links > * {
-    flex-grow: 1;
+    flex-grow: 2;
     /* To better see borders of elements inside the flex
     border-style:solid;
     border-color:#287EC7; */
@@ -231,6 +245,15 @@ li {
     padding: 3px 0px;
 }
 
+.result {
+    font-size: 26px;
+}
+
+.result > * {
+    color: #eee;
+    text-decoration: none;
+}
+
 @media all and (max-width: 800px) {
     .logo{
         width: 30%;
@@ -244,4 +267,3 @@ li {
       width: 60%;
       max-width: 70%;
     }
-}

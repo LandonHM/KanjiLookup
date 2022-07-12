@@ -1,6 +1,7 @@
 package org.landon.kanji.controller;
 
 import org.landon.kanji.model.Input;
+import org.landon.kanji.model.KanjiMeaning;
 import org.landon.kanji.repository.MeaningRepository;
 import org.landon.kanji.repository.RadicalsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 
 /**
@@ -67,23 +69,37 @@ public class KanjiControllerWeb {
 
     /**
      * Gets and passes data relating to the kanji which was searched to the webpage
-     * @param kanji String representation of kanji character which the user want to search
+     * @param search String representation of kanji character which the user want to search
      * @param model Model spring uses to pass data to thymeleaf
      * @return results page for a specific kanji
      */
-    @GetMapping(value = "/{kanji}", produces = {"text/html"})
-    public String getKanji(@PathVariable(value = "kanji") String kanji, Model model) {
+    @GetMapping(value = "/{search}", produces = {"text/html"})
+    public String getKanji(@PathVariable(value = "search") String search, Model model) {
         //System.out.println("{kanji} called");
         // The svg files are stored as the characters hex value padded with 0's
-        String fileName = String.format("%1$05x.svg", (int) kanji.charAt(0));
-
-        model.addAttribute("search", kanji);
-        model.addAttribute("filename", fileName);
-        model.addAttribute("meaning", meaningRepo.findMeaningByLiteral(kanji));
-        model.addAttribute("radicals", radicalRepo.findRadicalsByKanji(kanji));
         model.addAttribute("input", new Input());
 
-        return "result.html";
+        if(!isEnglish(search)) {
+            String fileName = String.format("%1$05x.svg", (int) search.charAt(0));
+            model.addAttribute("search", search);
+            model.addAttribute("filename", fileName);
+            model.addAttribute("meaning", meaningRepo.findMeaningByLiteral(search));
+            model.addAttribute("radicals", radicalRepo.findRadicalsByKanji(search));
+            return "result.html";
+        }else {
+            model.addAttribute("search", search);
+            // Get results for english meaning
+            KanjiMeaning[] results = meaningRepo.findMeaningByEnMeaning(search);
+            // Sort by frequency
+            // If both don't have frequency compare stoke counts
+            Arrays.sort(results, (a, b) -> {
+                int i = Integer.parseInt(a.getMisc().getOrDefault("freq", String.valueOf(Integer.parseInt(a.getMisc().get("stroke_count")) + 2501)));
+                int j = Integer.parseInt(b.getMisc().getOrDefault("freq", String.valueOf(Integer.parseInt(b.getMisc().get("stroke_count")) + 2501)));
+                return Integer.compare(i,j);
+            });
+            model.addAttribute("results", results);
+            return "en_result.html";
+        }
     }
 
     /**

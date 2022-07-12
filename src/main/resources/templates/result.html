@@ -66,7 +66,7 @@
                     });
                 }
             </script>
-            <div class="flex-links flex-center sb">
+            <div class="flex-links flex-center">
                     <a onclick="showTable('dictionary')" class="link center">Dictionary References</a>
                     <a onclick="showTable('querycode')" class="link center">Query Code</a>
                     <a onclick="showTable('codepoint')" class="link center">Codepoints</a>
@@ -93,12 +93,12 @@
                 </tr>
             </table>
         </div>
-        <div class="foot">
-            <a href="/sources">Click here for data sources</a>
-        </div>
     </div>
     <div th:unless="${meaning}" class="results">
         <p style="margin-top: 20px; font-size: 20px;">Could not find '[[${kanji}]]' in the database</p>
+    </div>
+    <div class="foot">
+        <a href="/sources">Click here for data sources</a>
     </div>
 </div>
 </body>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[${search}]] - Results</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<div class="content">
+    <div class="center">
+        <a th:href="@{~/}">
+            <img class="logo" th:src="@{'/images/logo.svg'}" th:attr="alt=Logo">
+        </a>
+    </div>
+    <form class="searchmain" method="post" th:action="@{/}" th:object="${input}">
+        <div class="inner">
+            <input class="button" type="submit" value="Search"/>
+            <div class="textin">
+                <input class="search" type="text" name="search" id="search" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${search}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character" />
+            </div>
+            <!-- For some reason th:attr="value=${search}" and th:value="${search}" didn't work so i need javascript -->
+            <script th:inline="javascript">
+                document.getElementById("search").value = [[${search}]];
+            </script>
+
+        </div>
+    </form>
+    <div th:if="${results}" class="results">
+        <div class="flex-col">
+            <div class="result" th:each="result : ${results}">
+                <a th:href="|/${result.literal}|">
+                    <p th:text="${result.literal}" style="font-size:30px">Literal</p>
+                    <p th:text="${#strings.arrayJoin(result.meaning.en,', ')}">Meaning</p>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${results}" class="results">
+        <p style="margin-top: 20px; font-size: 20px;">Could not find any instances of '[[${search}]]' in the database.</p>
+    </div>
+    <div class="foot" style="margin-top: 20px">
+        <a href="/sources">Click here for data sources</a>
+    </div>
+</div>
+</body>
+</html>

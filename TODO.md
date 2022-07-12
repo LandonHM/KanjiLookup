@@ -4,8 +4,7 @@
 - Add meanings from full dictionary
 
 ## Cli:
--
+- En lookup
 
 ## Web:
-- En lookup (may require some db work for case insenitivity)
 - Proper error page

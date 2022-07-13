@@ -52,10 +52,11 @@ public class KanjiControllerCli {
     @GetMapping(value = {"*","/help"})
     public @ResponseBody String getKanjiFallback(){
         return "\nUsage (replace kanji with either a kanji character or a url encoded kanji character) :" +
-                "\n\t$ curl {url}/{kanji}" +
-                "\n\n\t$ curl {url}/ref/{kanji}" +
-                "\n\n\t$ curl {url}/codepoint/{kanji}" +
-                "\n\n\t$ curl {url}/svg/{kanji}" +
+                "\n\t$ curl kanji.help/{kanji}" +
+                "\n\n\t$ curl kanji.help/ref/{kanji}" +
+                "\n\n\t$ curl kanji.help/codepoint/{kanji}" +
+                "\n\n\t$ curl kanji.help/en/{english}" +
+                "\n\n\t$ curl kanji.help/svg/{kanji}" +
                 "\n\t     (this returns an svg file you can either output it into an image viewer or into a file}" +
                 "\n\n";
     }

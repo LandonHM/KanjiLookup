@@ -1,7 +1,5 @@
 package org.landon.kanji.controller;
 
-import org.eclipse.jetty.util.ArrayTernaryTrie;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

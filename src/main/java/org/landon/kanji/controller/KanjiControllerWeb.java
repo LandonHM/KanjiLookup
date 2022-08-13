@@ -52,18 +52,20 @@ public class KanjiControllerWeb {
     @GetMapping(value={"/error", "/Error"})
     public String getError(Model model){
         model.addAttribute("input", new Input());
-        return "error";
+        return "error.html";
     }
 
     @GetMapping(value = "/error/{kanji}")
     public String geterrorKanji(@PathVariable(value = "kanji") String kanji, Model model) {
         model.addAttribute("badString", kanji);
-        return "error.html";
+        model.addAttribute("input", new Input());
+        return "error_kanji.html";
     }
 
     @GetMapping(value = "/Error/{kanji}")
     public String getErrorKanji(@PathVariable(value = "kanji") String kanji, Model model) {
         model.addAttribute("badString", kanji);
+        model.addAttribute("input", new Input());
         return "error.html";
     }
 

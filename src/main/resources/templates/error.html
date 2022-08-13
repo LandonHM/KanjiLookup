@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-<h1>Error page</h1>
+<div class="content">
+    <div class="center">
+        <a th:href="@{~/}">
+            <img class="logo" th:src="@{'/images/logo.svg'}" th:attr="alt=Logo">
+        </a>
+    </div>
+    <div class="intro">
+        <p style="text-align: center; font-size: 22px;">There was an error with your request. Click the logo to return to the homepage.</p>
+    </div>
+</div>
 </body>
 </html>

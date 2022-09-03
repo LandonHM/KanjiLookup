@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simple kanji lookup which provides meaning, on'yomi/kun'yomi readings, and proper stroke order">
     <title>[[${search}]] - Results</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
@@ -17,7 +18,7 @@
         <div class="inner">
             <input class="button" type="submit" value="Search"/>
             <div class="textin">
-                <input class="search" type="text" name="search" id="search" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${search}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character" />
+                <input class="search" type="text" name="search" id="search" th:field="*{kanji}" autocapitalize="off" autocorrect="off" autocomplete="off" th:attr="value=${search}" spellcheck="false" lang="ja" placeholder="Enter Kanji Character or English Word" />
             </div>
             <!-- For some reason th:attr="value=${search}" and th:value="${search}" didn't work so i need javascript -->
             <script th:inline="javascript">

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class which outputs data into a table for easier reading in terminal
+ */
 public class OutputFormatter {
     private String title;
     private List<Section> sections;

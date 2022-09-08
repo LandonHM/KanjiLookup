@@ -131,6 +131,11 @@ public class KanjiControllerCli {
         return output.toString();
     }
 
+    /**
+     * Returns kanji which have the meaning in english of the parameter
+     * @param english An english word to find kanji of
+     * @return A string of kanji which mean the english which was searched
+     */
     @GetMapping(value = "/en/{en}")
     public @ResponseBody String getKanjiFromEn(@PathVariable(value = "en") String english){
         StringBuilder output = new StringBuilder();
